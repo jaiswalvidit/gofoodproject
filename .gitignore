@@ -1,0 +1,16 @@
+# Ignore compiled files
+*.class
+*.jar
+*.war
+
+# Ignore Node.js modules
+node_modules/
+
+# Ignore logs and temporary files
+logs/
+.tmp/
+.cache/
+
+# Ignore configuration files with sensitive data
+config/config.json
+secrets/
