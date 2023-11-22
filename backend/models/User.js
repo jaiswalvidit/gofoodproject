@@ -6,11 +6,13 @@ const { Schema } = mongoose;
 const UserSchema = new Schema({
   name: {
     type: String,
-    required: true
+    required: true,
+    unique:true
   },
   email: {
     type: String,
-    required: true
+    required: true,
+    unique:true
   },
   password: {
     type: String,
@@ -28,9 +30,6 @@ const UserSchema = new Schema({
     type: Date,
     default: Date.now
   }
-});
-
-// module.exports = mongoose.model('User', UserSchema);
-
+},{timestamps:true});
 
 module.exports = mongoose.model('User',UserSchema);

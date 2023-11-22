@@ -9,8 +9,8 @@ const orderSchema = new mongoose.Schema({
   products: {
     type: Array,
     required: true,
-  }, // Array of products
-});
+  },
+},{timestamps:true});
 
 const Order = mongoose.model('Order', orderSchema);
 
