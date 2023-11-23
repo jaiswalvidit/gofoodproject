@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 const API_URLS = {
   USER_DATA: "http://localhost:5000/api/userdata",
-  UPDATE_PROFILE: "http://localhost:5000/api/updateprofile",
+
 };
 
 export default function EditAddress() {
@@ -20,7 +20,7 @@ export default function EditAddress() {
     async function fetchData() {
       try {
         const response = await fetch(API_URLS.USER_DATA, {
-          method: "POST",
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
@@ -58,8 +58,8 @@ export default function EditAddress() {
       console.log(updatedLocation);
 
       // Update the user data in the database
-      const response = await fetch(API_URLS.UPDATE_PROFILE, {
-        method: "POST",
+      const response = await fetch(API_URLS.USER_DATA, {
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },

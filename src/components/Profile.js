@@ -5,7 +5,7 @@ import EditAddress from "./EditAddress";
 
 const API_URLS = {
   USER_DATA: "http://localhost:5000/api/userdata",
-  UPDATE_PROFILE: "http://localhost:5000/api/updateprofile",
+
 };
 
 const Profile = () => {
@@ -19,7 +19,7 @@ const Profile = () => {
     async function fetchData() {
       try {
         const response = await fetch(API_URLS.USER_DATA, {
-          method: "POST",
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
@@ -48,8 +48,8 @@ const Profile = () => {
 
   const handleSaveClick = async () => {
     try {
-      const response = await fetch(API_URLS.UPDATE_PROFILE, {
-        method: "POST",
+      const response = await fetch(API_URLS.USER_DATA, {
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
