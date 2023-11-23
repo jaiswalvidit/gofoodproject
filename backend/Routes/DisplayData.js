@@ -17,11 +17,16 @@ router.patch('/userdata', async (req, res) => {
     try {
         const updatedData = req.body;
 
-        // Update the user's profile in the database based on the updatedData
+        // Ensure that the request body contains the email for updating
+        if (!updatedData.email) {
+            return res.status(400).json({ message: 'Email is required for updating user profile' });
+        }
+
+        // Find and update the user in the MongoDB collection
         const updatedUser = await User.findOneAndUpdate(
             { email: updatedData.email },
             { $set: updatedData },
-            { new: true } // Return the updated document
+            { new: true }
         );
 
         if (!updatedUser) {
@@ -35,4 +40,4 @@ router.patch('/userdata', async (req, res) => {
     }
 });
 
-module.exports = router; // Correct the export statement, it should be 'router', not 'module.export'
+module.exports = router;

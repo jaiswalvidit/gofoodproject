@@ -9,18 +9,27 @@ export default function MyOrder() {
     try {
       const userEmail = localStorage.getItem('userEmail');
 
+<<<<<<< HEAD
       // Ensure userEmail is present before making the request
       if (!userEmail) {
         console.error('User email not found in localStorage');
         return;
       }
 
+=======
+>>>>>>> 4c34730875cbe214882fb29291323b21218e7d14
       const response = await fetch(`http://localhost:5000/api/myOrderData?email=${userEmail}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         },
       });
+<<<<<<< HEAD
+=======
+      
+      
+
+>>>>>>> 4c34730875cbe214882fb29291323b21218e7d14
       if (response.ok) {
         const data = await response.json();
         setOrderData(data.orderData[0] || { email: '', products: [] });

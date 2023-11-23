@@ -2,7 +2,11 @@ import React, { useState, useEffect } from "react";
 
 const API_URLS = {
   USER_DATA: "http://localhost:5000/api/userdata",
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> 4c34730875cbe214882fb29291323b21218e7d14
 };
 
 export default function EditAddress() {

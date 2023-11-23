@@ -7,6 +7,7 @@ const User = require('../models/User');
 router.get('/myOrderData', async (req, res) => {
   try {
     // Validate the email address
+    console.log(req.query);
     const { email } = req.query;
     if (!email || typeof email !== 'string') {
       return res.status(400).json({ error: 'Invalid email address' });
