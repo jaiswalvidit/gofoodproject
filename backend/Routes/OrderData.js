@@ -4,10 +4,10 @@ const Order = require('../models/Orders'); // Adjust the path as needed
 const User = require('../models/User');
 
 // Get order data for a user
-router.post('/myOrderData', async (req, res) => {
+router.get('/myOrderData', async (req, res) => {
   try {
     // Validate the email address
-    const { email } = req.body;
+    const { email } = req.query;
     if (!email || typeof email !== 'string') {
       return res.status(400).json({ error: 'Invalid email address' });
     }
