@@ -2,18 +2,18 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/User'); // Import the User model
 
-router.post('/userdata', (req, res) => {
+router.get('/userdata', async (req, res) => {
     try {
-        res.send(global.users); // Use the correct variable name 'global.users'
-        console.log("hi");
-        console.log(global.users);
+        const users = await User.find();
+        res.json(users);
     } catch (error) {
-        console.log(error);
-        res.send('Server Error'); // Put 'Server Error' inside quotes
+        console.error('Error fetching user data:', error);
+        res.status(500).json({ message: 'Internal Server Error', error: error.message });
     }
 });
 
-router.post('/updateprofile', async (req, res) => {
+
+router.patch('/userdata', async (req, res) => {
     try {
         const updatedData = req.body;
 
