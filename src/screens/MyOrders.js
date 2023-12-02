@@ -12,7 +12,7 @@ export default function MyOrder() {
       try {
         const userEmail = localStorage.getItem('userEmail');
 
-        const response = await fetch(`http://localhost:5000/api/myOrderData?email=${userEmail}`, {
+        const response = await fetch(`https://gofoodproject.vercel.app/api/myOrderData?email=${userEmail}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

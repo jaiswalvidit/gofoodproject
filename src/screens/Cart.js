@@ -21,7 +21,7 @@ export default function Cart() {
         'pk_test_51NtSqvSA9hxVLxKfUkTY1DACH1qBGcxaVJv1kwSTyfof4OlGiYkI6kcIswyhdjdAaJ4NfHlKKvgxF3QmE5mVYgWP00wdcBfQGp'
       );
 
-      const response = await fetch('http://localhost:5000/api/create-checkout-session', {
+      const response = await fetch('https://gofoodproject.vercel.app/api/create-checkout-session', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

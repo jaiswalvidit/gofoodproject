@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 const API_URLS = {
-  USER_DATA: "http://localhost:5000/api/userdata",
+  USER_DATA: "https://gofoodproject.vercel.app/api/userdata",
 };
 
 export default function EditAddress() {
