@@ -12,11 +12,16 @@ import About from './components/about';
 import Contact from './components/Contact';
 import Cancel from './components/Cancel';
 import Success from './components/Success';
-
+// import RestaurantDetail from './components/GetPage';
 import Profile from './components/Profile';
 import Footer from './components/Footer';
 import Navbar from './components/Navbar';
 import Body from './components/Body';
+import Restaurant from './screens/Restaurant';
+import Display from './components/Display';
+import Item from './components/addItem';
+// import GetPage from './components/GetPage';
+import RestaurantDetail from './screens/RestaurantDetail';
 function App() {
   return (
     <>
@@ -31,6 +36,10 @@ function App() {
             <Route path="/success" element={<Success />} />
             <Route path="/cancel" element={<Cancel />} />
             <Route path="/auth/login" element={<Login />} />
+            <Route path="/addrestaurant" element={<Restaurant />} />
+            <Route path="/display" element={<Display />} />
+            <Route path="/display/:_id" element={<RestaurantDetail/>} />
+            <Route path="/addItem" element={<Item />} />
             <Route path="/auth/createuser" element={<Signup />} />
             <Route path="/myorder" element={<MyOrder />} />
             <Route path="/about" element={<About />} />

@@ -1,42 +1,45 @@
+require("dotenv").config();
 const express = require('express');
 const app = express();
 const cors = require('cors');
-const stripe = require('stripe')('sk_test_51NtSqvSA9hxVLxKfLgU6S1xY0iSdPnSiuAY1b3PrNgQgp6hV6NZMEQf8C8icLGmrA1m7cRhRkUM8fVA5eV38gqPn006qaMCZDC');
+const stripe = require('stripe')(process.env.stripe);
 const MongoDb = require('./db');
-const Order = require('./models/Orders'); 
-// const User=require("./models/User");S
-app.use(cors());
+const Order = require('./models/Orders');
+// const User=require("./models/user");
+app.use(cors({
+  origin: 'http://localhost:3000', 
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,  
+}));
 app.use(express.json());
 app.get('/', (req, res) => {
-  res.send('Hello World');
+  res.send('Hello from india');
 });
 MongoDb();
-app.use('/api/auth', require('./Routes/CreateUser'));
-app.use('/api', require('./Routes/DisplayData'));
-app.use('/api',require('./Routes/OrderData'));
-const port = process.env.PORT || 5000;
+app.use('/api/auth', require('./routes/CreateData'));
+app.use('/api', require('./routes/DisplayData'));
+app.use('/api',require('./routes/OrderData'));
+app.use('/api/',require('./routes/Restaurant'));
+app.use('/api',require('./routes/ItemData'));
+const port = process.env.PORT || 6000;
 
 // Connect to MongoDB
 
 
 // Create a route for creating a checkout session
 app.post('/api/create-checkout-session', async (req, res) => {
+    res.send("hellp");
   try {
+
     const { products, email } = req.body;
     console.log(products);
-
-    // Find an existing order by email
     let eId = await Order.findOne({ 'email': email });
     
     console.log("f");
-    // console.log(uId);
 
-    // Define the supported payment methods
     const paymentMethods = [
       'card',
-    
-    
-      // Add more payment methods here as needed (only use supported ones)
+  
     ];
     // Create a Stripe checkout session
     const session = await stripe.checkout.sessions.create({

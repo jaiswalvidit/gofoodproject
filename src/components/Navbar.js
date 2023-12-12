@@ -38,7 +38,7 @@ const Navbar = () => {
           <Link className="navbar-brand border bg-white rounded-circle" to="/">
             <img
               src={LOG_URL}
-              alt="Fast Food"
+              alt="Food Space"
               style={{
                 maxWidth: '50px',
                 height: 'auto',
@@ -57,6 +57,42 @@ const Navbar = () => {
                   Home
                 </Link>
               </li>
+              <li className="nav-item">
+              <Link
+                className={`nav-link px-3 ${location.pathname === '/addItem' ? 'active' : ''}`}
+                to="/addItem"
+                key="additem"
+              >
+                Add Item
+              </Link>
+            </li>
+            <li className="nav-item">
+              {/* <Link
+                className={`nav-link px-3 ${location.pathname === '/getItem' ? 'active' : ''}`}
+                to="/getItem"
+                key="getItem"
+              >
+                Get Item
+              </Link> */}
+            </li>
+              <li className="nav-item">
+              <Link
+                className={`nav-link px-3 ${location.pathname === '/addrestaurant' ? 'active' : ''}`}
+                to="/addrestaurant"
+                key="addrestaurant"
+              >
+                Add Restaurant
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link
+                className={`nav-link px-3 ${location.pathname === '/display' ? 'active' : ''}`}
+                to="/display"
+                key="display"
+              >
+                Display
+              </Link>
+            </li>
               <li className="nav-item">
                 {authToken ? (
                   <Link

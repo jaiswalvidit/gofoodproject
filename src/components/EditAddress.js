@@ -1,12 +1,6 @@
 import React, { useState, useEffect } from "react";
-
 const API_URLS = {
-  USER_DATA: "http://localhost:5000/api/userdata",
-<<<<<<< HEAD
-  
-=======
-
->>>>>>> 4c34730875cbe214882fb29291323b21218e7d14
+  USER_DATA: "/api/userdata",
 };
 
 export default function EditAddress() {
@@ -29,7 +23,7 @@ export default function EditAddress() {
             "Content-Type": "application/json",
           },
         });
-
+      
         if (response.ok) {
           const users = await response.json();
           const filteredUser = users.find((user) => user.email === useremail);
@@ -217,3 +211,4 @@ export default function EditAddress() {
     </div>
   );
 }
+

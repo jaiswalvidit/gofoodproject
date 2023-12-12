@@ -2,14 +2,8 @@ import React, { useState, useEffect } from "react";
 import MyOrder from "../screens/MyOrders";
 import About from "./about";
 import EditAddress from "./EditAddress";
-
 const API_URLS = {
-  USER_DATA: "http://localhost:5000/api/userdata",
-<<<<<<< HEAD
- 
-=======
-
->>>>>>> 4c34730875cbe214882fb29291323b21218e7d14
+  USER_DATA: "/userdata",
 };
 
 const Profile = () => {

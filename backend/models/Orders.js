@@ -6,10 +6,7 @@ const orderSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
-  products: {
-    type: Array,
-    required: true,
-  },
+  products: [],
 },{timestamps:true});
 
 const Order = mongoose.model('Order', orderSchema);

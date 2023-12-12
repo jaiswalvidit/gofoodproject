@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const Order = require('../models/Orders'); // Adjust the path as needed
-const User = require('../models/User');
+const Order = require('../models/Orders');
+const User = require('../models/user');
 
 // Get order data for a user
 router.get('/myOrderData', async (req, res) => {
