@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-
 import { IMAGE_URL } from '../constants';
 
 export default function MyOrder() {
@@ -12,15 +11,17 @@ export default function MyOrder() {
       try {
         const userEmail = localStorage.getItem('userEmail');
 
-        const response = await fetch(`/api/myOrderData?email=${userEmail}`, {
+        const response = await fetch(`http://localhost:8001/api/myOrderData?email=${userEmail}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
           },
         });
+        console.log(response);
 
         if (response.ok) {
           const data = await response.json();
+          console.log(data);
           setOrderData(data.orderData[0] || { email: '', products: [] });
         } else {
           console.error('Fetch failed with status:', response.status);
@@ -37,6 +38,7 @@ export default function MyOrder() {
     fetchMyOrder();
   }, []);
 
+  // Styles
   const cardStyle = {
     backgroundColor: '#343a40',
     color: 'white',
@@ -101,12 +103,12 @@ export default function MyOrder() {
                                         <strong>Description: {product.description}</strong>
                                       </p>
                                     </div>
-                                    <div className="text-end col-3 rounded ">
+                                    <div className="text-end col-3 rounded">
                                       <img
                                         src={`${IMAGE_URL}${product.imageId || 'defaultImageId'}`}
                                         alt={`Product ${product.Name}`}
                                         style={{ maxWidth: '100%', height: 'auto' }}
-                                        className="img-fluid  rounded"
+                                        className="img-fluid rounded"
                                       />
                                     </div>
                                   </div>

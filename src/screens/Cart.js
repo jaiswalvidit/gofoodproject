@@ -3,28 +3,27 @@ import trash from '../assets/trash.svg';
 import { useCart, useDispatchCart } from '../components/ContextReducer';
 import { IMAGE_URL } from '../constants';
 import { loadStripe } from '@stripe/stripe-js';
-
 export default function Cart() {
   const data = useCart();
   const dispatch = useDispatchCart();
   const userEmail = localStorage.getItem('userEmail');
-
   const body = {
     products: data,
     email: userEmail,
     order_date: new Date().toDateString(),
   };
-
   const handlePayment = async () => {
     try {
+      
+   
       const stripe = await loadStripe(
-        'pk_test_51NtSqvSA9hxVLxKfUkTY1DACH1qBGcxaVJv1kwSTyfof4OlGiYkI6kcIswyhdjdAaJ4NfHlKKvgxF3QmE5mVYgWP00wdcBfQGp'
+        "pk_test_51NtSqvSA9hxVLxKfUkTY1DACH1qBGcxaVJv1kwSTyfof4OlGiYkI6kcIswyhdjdAaJ4NfHlKKvgxF3QmE5mVYgWP00wdcBfQGp"
       );
 
-      const response = await fetch('/api/create-checkout-session', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await fetch('http://localhost:8001/api/create-checkout-session', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
         },
         body: JSON.stringify(body),
       });
@@ -76,15 +75,15 @@ export default function Cart() {
         </thead>
         <tbody>
           {data.map((food, index) => (
-            <tr key={food.id}>
+            <tr key={food.cloudinaryImageId}>
               <th scope="row">{index + 1}</th>
               <td>{food.Name}</td>
               <td>{food.qty}</td>
-              <td>Rs. {(food.price * food.qty) / 100}</td>
+              <td>Rs. {(food.price * food.qty) }</td>
               <td>
                 <img
                   className="card-img-top rounded"
-                  src={`${IMAGE_URL}${food.imageId || 'defaultImageId'}`}
+                  src={`${IMAGE_URL}${food.cloudinaryImageId || 'defaultImageId'}`}
                   alt="Food"
                   style={{ height: '80px', width: '100px', objectFit: 'cover' }}
                 />
@@ -105,7 +104,7 @@ export default function Cart() {
     </div>
     <div className="d-flex justify-content-between fs-4 fw-bold"> {/* Added 'fw-bold' class */}
       <div>Total Items: {totalItems}</div>
-      <div>Total Price: Rs. {totalPrice / 100}/-</div>
+      <div>Total Price: Rs. {totalPrice }/-</div>
     </div>
     <div className="text-center mt-4">
       <button className="btn btn-success btn-lg" onClick={handlePayment}>

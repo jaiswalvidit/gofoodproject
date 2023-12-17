@@ -15,7 +15,10 @@ router.get('/addRestaurant/:restaurantName', async (req, res) => {
   try {
     const { restaurantName} = req.params;
     
-    const restaurantWithItems = await Restaurant.findById(restaurantName).populate('lists');
+    const restaurantWithItems = await Restaurant.findById(restaurantName)
+  .populate('lists')
+  .populate('cuisines');
+  console.log(restaurantWithItems);
     res.json(restaurantWithItems);
   } catch (error) {
     console.error('Error getting restaurant with items:', error);
@@ -27,8 +30,14 @@ router.get('/addRestaurant/:restaurantName', async (req, res) => {
 
 router.get('/addRestaurant', async (req, res) => {
   try {
-    const restaurants = await Restaurant.find().exec();
-    res.status(200).json(restaurants);
+    const restaurantWithItems = await Restaurant.find().populate({
+      path: 'cuisines',
+      select: 'category',
+    });
+    // const restaurants = await Restaurant.find().exec();
+    // res.json(restaurantWithItems);
+    console.log(restaurantWithItems);
+    res.status(200).json(restaurantWithItems);
   } catch (error) {
     console.error('Error getting restaurants:', error);
     res.status(500).json({ message: 'Internal Server Error' });

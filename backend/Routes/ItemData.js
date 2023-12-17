@@ -11,7 +11,9 @@ router.post('/createItem', async (req, res) => {
       category,
       parentName,
       Rating,
-      availability
+      cost,
+      availability,
+      description
     } = req.body;
 
     if (!itemName || !category || !parentName || Rating === undefined || availability === undefined) {
@@ -24,7 +26,9 @@ router.post('/createItem', async (req, res) => {
       category,
       parentName,
       Rating,
-      availability
+      cost,
+      availability,
+      description
     });
     const restaurant = await Restaurant.findOne({ restaurantName: parentName });
     console.log("hi");
@@ -34,11 +38,12 @@ router.post('/createItem', async (req, res) => {
     if (!restaurant) {
       return res.status(404).json({ message: 'First add Restaurant !!!!!!!!' });
     } 
-    restaurant.lists.push(createdItem);
+    restaurant.lists.push(createdItem._id);
+    console.log(createdItem._id);
+    console.log(createdItem.category);
     await restaurant.save();
-
-    console.log(createdItem);
-
+    restaurant.cuisines.push(createdItem._id);
+    
     res.status(201).json({ message: 'Item added successfully', item: createdItem });
   } catch (error) {
     console.error(error);

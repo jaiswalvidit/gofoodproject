@@ -90,29 +90,11 @@ const Navbar = () => {
                 to="/display"
                 key="display"
               >
-                Display
+                Menu
               </Link>
             </li>
-              <li className="nav-item">
-                {authToken ? (
-                  <Link
-                    className={`nav-link px-3 ${location.pathname === '/myorder' ? 'active' : ''}`}
-                    to="/myorder"
-                    key="myorders"
-                  >
-                    My Orders
-                  </Link>
-                ) : null}
-              </li>
-              <li className="nav-item">
-                <Link
-                  className={`nav-link px-3 ${location.pathname === '/menu' ? 'active' : ''}`}
-                  to="/menu"
-                  key="menu"
-                >
-                  Menu
-                </Link>
-              </li>
+             
+              
               <li className="nav-item">
                 <Link
                   className={`nav-link px-3 ${location.pathname === '/about' ? 'active' : ''}`}
@@ -192,15 +174,7 @@ const Navbar = () => {
                   </>
                 )}
               </li>
-              <li className="nav-item">
-                <Link
-                  className={`nav-link px-3 ${location.pathname === '/contact' ? 'active' : ''}`}
-                  to="/contact"
-                  key="contact"
-                >
-                  Contact us
-                </Link>
-              </li>
+              
             </ul>
 
             <div className="">

@@ -26,25 +26,30 @@ const itemSchema = new Schema(
       min: 1,
       max: 5,
     },
+    cost:{
+      type:Number,
+      required:true
+    },
     availability: {
       type: Boolean,
       required: true,
       default: true,
     },
-  },
+  
+  description:{
+    type:String,
+    
+  }
+},
   { timestamps: true }
 );
 
 // Middleware to update restaurant after saving an item
 itemSchema.post('save', async function (doc) {
   try {
-    // Find the associated restaurant and update its lists array
     const restaurant = await Restaurant.findOneAndUpdate(
-      { RestaurantName: doc.parentName },
-      {$push: { lists: doc._id },
-        $addToSet: { cuisines: doc.category }
-      },
-      
+      { restaurantName: doc.parentName },
+      { $push: { lists: doc._id, cuisines: doc._id } },
       { new: true }
     ).exec();
 
@@ -53,5 +58,4 @@ itemSchema.post('save', async function (doc) {
     console.error('Error updating restaurant:', error);
   }
 });
-
 module.exports = mongoose.model('Item', itemSchema);

@@ -2,9 +2,9 @@ import React from "react";
 
 export default function About() {
   return (
-    <div  classNmae="m-0" style={{ background: "rgba(255, 255, 0, 0.1)" }}>
-      <div className="container py-5" >
-        <div className="text-center text-danger  fs-2">
+    <div className="m-0" style={{ background: "rgba(255, 255, 0, 0.1)" }}>
+      <div className="container py-5">
+        <div className="text-center text-danger fs-2">
           <h2>About FastFood</h2>
           <p className="lead text-secondary fs-4">
             FastFood is a fantastic food delivery app that connects hungry

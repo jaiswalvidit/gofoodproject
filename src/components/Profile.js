@@ -2,9 +2,7 @@ import React, { useState, useEffect } from "react";
 import MyOrder from "../screens/MyOrders";
 import About from "./about";
 import EditAddress from "./EditAddress";
-const API_URLS = {
-  USER_DATA: "/userdata",
-};
+
 
 const Profile = () => {
   const [userData, setUserData] = useState(null);
@@ -16,7 +14,7 @@ const Profile = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch(API_URLS.USER_DATA, {
+        const response = await fetch('http://localhost:8001/api/userdata', {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -46,7 +44,7 @@ const Profile = () => {
 
   const handleSaveClick = async () => {
     try {
-      const response = await fetch(API_URLS.USER_DATA, {
+      const response = await fetch('http://localhost:8001/api/userdata', {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

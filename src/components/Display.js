@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import RestaurantCard from './RestaurantCard'; // Import the RestaurantCard component
+import Shimmer from './Shimmer';
 
 const Display = () => {
   const [restaurantList, setRestaurantList] = useState([]);
@@ -8,7 +10,7 @@ const Display = () => {
   useEffect(() => {
     const fetchRestaurantData = async () => {
       try {
-        const response = await fetch('http://localhost:8001/api/addRestaurant/', {
+        const response = await fetch('http://localhost:8001/api/auth/addRestaurant/', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -17,7 +19,6 @@ const Display = () => {
 
         if (response.ok) {
           const data = await response.json();
-          console.log(data);
 
           if (Array.isArray(data)) {
             setRestaurantList(data);
@@ -33,29 +34,32 @@ const Display = () => {
     };
 
     fetchRestaurantData();
-  }, []); 
+  }, []);
 
   return (
     <div>
       <div className="container mt-4">
         <h1 className="mt-4">Restaurant List</h1>
         <div className="row">
-          {restaurantList.map((restaurant) => (
-            <div key={restaurant._id} className="col-md-4 mb-4">
-              <Link to={`/display/${restaurant._id}`} className="card-link">
-                <div className="card h-100">
-                  <img src={`URL_TO_RESTAURANT_IMAGE/${restaurant.cloudinaryImageId}`} className="card-img-top" alt={restaurant.restaurantName} />
-                  <div className="card-body">
-                    <h5 className="card-title">{restaurant.restaurantName}</h5>
-                    <p className="card-text">{restaurant.areaName}</p>
-                    <p className="card-text">{restaurant.Rating} - {restaurant.areaName}</p>
-                    <p className="card-text">Availability: {restaurant.availability ? 'Open' : 'Closed'}</p>
-                    <p className="card-text">Cuisines: {restaurant.cuisines.join(', ')}</p>
-                  </div>
+          {restaurantList && restaurantList.length > 0 ? (
+           restaurantList.map((restaurant) => (
+            <div key={restaurant.id} className="col-md-4 mb-4">
+              <Link to={"/display/"+restaurant._id} style={{ textDecoration: "none" }}>
+                <div className="">
+                  <RestaurantCard resData={restaurant} />
                 </div>
               </Link>
             </div>
-          ))}
+          ))
+          
+            
+          ) : (
+            <div className="col-md-12 text-center">
+              <div>
+                <Shimmer />
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

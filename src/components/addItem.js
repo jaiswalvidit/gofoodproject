@@ -1,19 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const AddItemForm = () => {
-  // State to hold form data
-  const [formData, setFormData] = useState(
-    {
-        itemName: "Pasta Alfredo",
-        cloudinaryImageId: "image3",
-        category: "Pasta",
-        parentName: "Italian Delight",
-        Rating: 5,
-        availability: true
-      
+  const [formData, setFormData] = useState({
+    itemName: 'Pasta Alfredo',
+    cloudinaryImageId: 'image3',
+    category: 'Pasta',
+    parentName: '', 
+    Rating: 5,
+    cost: 1,
+    availability: true,
+    description: 'optional',
   });
 
-  // Function to handle form input changes
+  const [parentOptions, setParentOptions] = useState([]);
+
+  useEffect(() => {
+    const fetchRestaurants = async () => {
+      try {
+        const response = await fetch('http://localhost:8001/api/auth/addrestaurant');
+        const data = await response.json();
+        console.log(data[0]);
+        // Assuming your API response has an array of restaurant objects with a 'name' property
+        const restaurantNames = data.map((restaurant) => restaurant.restaurantName);
+        console.log(restaurantNames);
+        setParentOptions(restaurantNames);
+      } catch (error) {
+        console.error('Error fetching restaurant names:', error.message);
+      }
+    };
+
+    fetchRestaurants();
+  }, []);
+
   const handleChange = (e) => {
     const { name, value, type } = e.target;
     setFormData((prevData) => ({
@@ -21,161 +39,200 @@ const AddItemForm = () => {
       [name]: type === 'number' ? parseFloat(value) : value,
     }));
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(formData);
- 
-  
+
     try {
-      const response = await fetch('http://localhost:8001/api/createItem', {
+      const response = await fetch('http://localhost:8001/api/auth/createItem', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json', 
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
-        
       });
+
       console.log(response);
-  
+
       if (!response.ok) {
         console.error(`Request failed with status ${response.status}`);
-        // Handle error here, e.g., show an error message to the user
         return;
       }
-  
+
       const json = await response.json();
       console.log('API Response:', json);
-  
-      // Add logic for handling the API response, e.g., show a success message
-  
-      // Reset the form after submission
+
       setFormData({
-        
-        itemName:'' ,
-        cloudinaryImageId:'' ,
-        category:'' ,
-        parentName:'',
-        Rating:'',
-        availability:''
+        itemName: '',
+        cloudinaryImageId: '',
+        category: '',
+        parentName: '',
+        Rating: '',
+        cost: '',
+        availability: '',
+        description: '',
       });
     } catch (error) {
       console.error('Error:', error.message);
-      // Handle other errors here
     }
   };
-  
+
   return (
-    <div>
-      <h2>Add a New Restaurant</h2>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Item Name:
-          <input
-            type="text"
-            name="itemName"
-            value={formData.itemName}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <br />
-       
-        <label>
-          Image:
-          <input
-            type="text"
-            name="cloudinaryImageId"
-            value={formData.cloudinaryImageId}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <br />
-        <label>
-          Category:
-          <input
-            type="text"
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <br />
-        <label>
-          ParentName:
-          <input
-            type="text"
-            name="parentName"
-            value={formData.parentName}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <br />
+    <div className="container mt-5">
+      <div className="card p-4">
+        <h2 className="mb-4 text-center text-primary">Add a New Item</h2>
+        <form onSubmit={handleSubmit}>
 
-        {/* <label>
-          Cost:
-          <input
-            type="number"
-            name="cost"
-            value={formData.cost}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <br /> */}
+          {/* First Column */}
+          <div className="row">
+            <div className="col-md-6">
 
-        {/* <label>
-          Rating:
-          <input
-            type="text"
-            name="Rating"
-            value={formData.Rating}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <br /> */}
+              <div className="mb-3">
+                <label htmlFor="itemName" className="form-label fw-bold">
+                  Item Name:
+                </label>
+                <input
+                  type="text"
+                  name="itemName"
+                  value={formData.itemName}
+                  onChange={handleChange}
+                  className="form-control"
+                  required
+                />
+              </div>
 
-        <label>
-          Rating:
-          <input
-            type="number"
-            name="Rating"
-            value={formData.Rating}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <br />
+              <div className="mb-3">
+                <label htmlFor="cloudinaryImageId" className="form-label fw-bold">
+                  Image:
+                </label>
+                <input
+                  type="text"
+                  name="cloudinaryImageId"
+                  value={formData.cloudinaryImageId}
+                  onChange={handleChange}
+                  className="form-control"
+                  required
+                />
+              </div>
 
-        {/* <label>
-          Delivery Time:
-          <input
-            type="text"
-            name="DeliveryTime" // Update to match the case in the state
-            value={formData.DeliveryTime}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <br /> */}
+              <div className="mb-3">
+                <label htmlFor="cost" className="form-label fw-bold">
+                  Cost:
+                </label>
+                <input
+                  type="text"
+                  name="cost"
+                  value={formData.cost}
+                  onChange={handleChange}
+                  className="form-control"
+                  required
+                />
+              </div>
 
-        <label>
-          Availability:
-          <input
-            type="text"
-            name="availability"
-            value={formData.availability}
-            onChange={handleChange}
-            required
-          />
-        </label>
-        <br />
+            </div>
 
-        <button type="submit">Add Restaurant</button>
-      </form>
+            {/* Second Column */}
+            <div className="col-md-6">
+
+              <div className="mb-3">
+                <label htmlFor="description" className="form-label fw-bold">
+                  Description:
+                </label>
+                <input
+                  type="text"
+                  name="description"
+                  value={formData.description}
+                  onChange={handleChange}
+                  className="form-control"
+                  required
+                />
+              </div>
+
+              <div className="mb-3">
+                <label htmlFor="category" className="form-label fw-bold">
+                  Category:
+                </label>
+                <input
+                  type="text"
+                  name="category"
+                  value={formData.category}
+                  onChange={handleChange}
+                  className="form-control"
+                  required
+                />
+              </div>
+
+              <div className="mb-3">
+                <label htmlFor="parentName" className="form-label fw-bold">
+                  Parent Name (Restaurant):
+                </label>
+                <select
+                  name="parentName"
+                  value={formData.parentName}
+                  onChange={handleChange}
+                  className="form-select"
+                  required
+                >
+                  <option value="" disabled>Select a restaurant</option>
+                  {parentOptions.map((option) => (
+                    <option key={option} value={option}>{option}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label fw-bold">Rating:</label>
+                <input
+                  type="number"
+                  name="Rating"
+                  value={formData.Rating}
+                  onChange={handleChange}
+                  className="form-control"
+                  required
+                />
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label fw-bold">Availability:</label>
+                <div className="form-check">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="availability"
+                    id="availabilityTrue"
+                    value="true"
+                    checked={formData.availability === true}
+                    onChange={handleChange}
+                  />
+                  <label className="form-check-label" htmlFor="availabilityTrue">
+                    True
+                  </label>
+                </div>
+                <div className="form-check">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="availability"
+                    id="availabilityFalse"
+                    value="false"
+                    checked={formData.availability === false}
+                    onChange={handleChange}
+                  />
+                  <label className="form-check-label" htmlFor="availabilityFalse">
+                    False
+                  </label>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <button type="submit" className="btn btn-primary">
+            Add Item
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

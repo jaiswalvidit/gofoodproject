@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-const API_URLS = {
-  USER_DATA: "/api/userdata",
-};
+// const API_URLS = {
+  // USER_DATA: "/api/userdata",
+// };
 
 export default function EditAddress() {
   const [userData, setUserData] = useState(null);
@@ -17,7 +17,7 @@ export default function EditAddress() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch(API_URLS.USER_DATA, {
+        const response = await fetch('http://localhost:8001/api/userdata', {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -56,7 +56,7 @@ export default function EditAddress() {
       console.log(updatedLocation);
 
       // Update the user data in the database
-      const response = await fetch(API_URLS.USER_DATA, {
+      const response = await fetch('http://localhost:8001/api/userdata', {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

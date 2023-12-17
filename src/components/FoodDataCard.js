@@ -2,69 +2,63 @@ import React, { useState, useEffect } from 'react';
 import { useDispatchCart, useCart } from './ContextReducer';
 import { IMAGE_URL } from '../constants';
 
-function FoodDataCard({ foodItem, url }) {
+function FoodDataCard({ foodItem }) {
   const dispatch = useDispatchCart();
   const data = useCart();
 
-  const fixedPrice = foodItem.price || foodItem.defaultPrice;
+  const fixedPrice = foodItem.cost;
   const [qty, setQty] = useState(0);
   const [addedToCart, setAddedToCart] = useState(false);
-
-  const finalPrice = (qty * fixedPrice) / 100;
+  const finalPrice = qty * fixedPrice;
 
   const handleAddToCart = async () => {
     if (qty > 0) {
-      const existingFoodIndex = data.findIndex((item) => item.id === foodItem.id);
+      const existingFoodIndex = data.findIndex(item => item.id === foodItem._id);
 
       if (existingFoodIndex !== -1) {
         const existingFood = data[existingFoodIndex];
-        const updatedQty = existingFood.qty + qty;
-        await dispatch({ type: 'UPDATE', index: existingFoodIndex, qty: updatedQty });
+        await dispatch({ type: 'UPDATE', index: existingFoodIndex, qty: existingFood.qty + qty });
       } else {
-        await dispatch({ type: 'ADD', id: foodItem.id, name: foodItem.name, price: fixedPrice, qty: qty, imageId: foodItem.imageId, description: foodItem.description });
+        await dispatch({
+          type: 'ADD',
+          id: foodItem._id,
+          name: foodItem.itemName,
+          price: fixedPrice,
+          qty,
+          imageId: foodItem.cloudinaryImageId,
+          description: foodItem.description
+        });
       }
 
       setAddedToCart(true);
       setQty(0);
-
       console.log(data);
     }
   };
 
-  const decrementQty = () => {
-    if (qty > 0) {
-      setQty(qty - 1);
-    }
-  };
-
-  const incrementQty = () => {
-    setQty(qty + 1);
-  };
+  const decrementQty = () => qty > 0 && setQty(qty - 1);
+  const incrementQty = () => setQty(qty + 1);
 
   useEffect(() => {
     let timer;
     if (addedToCart) {
-      timer = setTimeout(() => {
-        setAddedToCart(false);
-      }, 400);
+      timer = setTimeout(() => setAddedToCart(false), 400);
     }
-
-    return () => {
-      clearTimeout(timer);
-    };
+    return () => clearTimeout(timer);
   }, [addedToCart]);
 
   return (
     <div className="card m-2 bg-light text-dark rounded-20" style={{ maxWidth: "400px", borderRadius: "10px", boxShadow: "2px 4px 2px rgba(0, 0, 0, 0.6)", transition: "transform 0.2s" }}
-      onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.05)"; }}
-      onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
+      onMouseEnter={(e) => e.currentTarget.style.transform = "scale(1.05)"}
+      onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}
     >
-      <img className='img-fluid rounded' src={`${IMAGE_URL}${foodItem.imageId}`} alt='Food' style={{ objectFit: 'contain', width: "100%", maxHeight: "200px" }} />
+      <img className='img-fluid rounded' src={`${IMAGE_URL}${foodItem.cloudinaryImageId}`} alt='Food' style={{ objectFit: 'contain', width: "100%", maxHeight: "200px" }} />
       <div className='card-body text-center'>
         <div className='row'>
           <div className='col-md-7'>
-            <h5 className='card-title text-secondary fs-5'>{foodItem.name}</h5>
-            <p className='card-text text-primary fs-6'>Rs {fixedPrice / 100}</p>
+            <h5 className='card-title text-secondary fs-5'>{foodItem.itemName}</h5>
+            <p className='card-text text-primary fs-6'>Rs {foodItem.cost}</p>
+            
           </div>
           <div className='col-md-5'>
             <div className='quantity-control text-success fs-6'>
