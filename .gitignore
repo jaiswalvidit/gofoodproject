@@ -2,10 +2,12 @@
 *.class
 *.jar
 *.war
-
 # Ignore Node.js modules
 node_modules/
-backend/node_modules
+backend/node_modules/
+build/
+
+
 
 # Ignore logs and temporary files
 logs/
