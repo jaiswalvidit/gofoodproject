@@ -30,12 +30,7 @@ const restaurantSchema = new Schema(
         ref:"Item",
     },
     ],
-    parentId: {
-      type: String,
-      required:true,
-      unique:true
-      
-    },
+
     Rating: {
       type: Number,
       required: true

@@ -11,7 +11,9 @@ export default function Cart() {
     products: data,
     email: userEmail,
     order_date: new Date().toDateString(),
+    
   };
+  
   const handlePayment = async () => {
     try {
       

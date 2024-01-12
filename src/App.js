@@ -21,6 +21,7 @@ import Item from './components/addItem';
 import RestaurantDetail from './screens/RestaurantDetail';
 import Error from './components/Error';
 
+
 function App() {
   return (
     <CartProvider>

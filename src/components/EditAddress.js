@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 // const API_URLS = {
   // USER_DATA: "/api/userdata",
 // };
@@ -67,11 +69,14 @@ export default function EditAddress() {
       if (response.ok) {
         const updatedUserData = await response.json();
         setUserData(updatedUserData);
+        toast.success("Data has been saved successfully.")
         setIsEditing(false);
       } else {
+        toast.danger("Failed to update data!!!!")
         console.error("Failed to update user data");
       }
     } catch (error) {
+      toast.danger("Error on fetching data!!!!")
       console.error("Error updating user data:", error);
     }
   };
@@ -208,6 +213,7 @@ export default function EditAddress() {
       <button className="btn btn-primary my-2" onClick={handleSaveClick}>
         Save
       </button>
+      <ToastContainer position="top-center" />
     </div>
   );
 }

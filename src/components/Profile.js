@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import MyOrder from "../screens/MyOrders";
 import About from "./about";
 import EditAddress from "./EditAddress";
-
-
+import Review from "./Review";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const Profile = () => {
   const [userData, setUserData] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -42,6 +43,9 @@ const Profile = () => {
     fetchData();
   }, [useremail]);
 
+
+  
+
   const handleSaveClick = async () => {
     try {
       const response = await fetch('http://localhost:8001/api/userdata', {
@@ -56,10 +60,12 @@ const Profile = () => {
         const updatedUserData = await response.json();
         setUserData(updatedUserData);
         setIsEditing(false);
+        toast.success("Data updated successfully....");
       } else {
         console.error("Failed to update user data");
       }
     } catch (error) {
+      toast.error("Some error has occured...");
       console.error("Error updating user data:", error);
     }
   };
@@ -81,6 +87,8 @@ const Profile = () => {
         return <About />;
         case "address":
           return <EditAddress/>;
+          case "review":
+            return <Review/>;
       default:
         return null;
     }
@@ -150,6 +158,19 @@ const Profile = () => {
                   >
                     Address
                   </li>
+
+
+
+
+                  <li
+                    className={`list-group-item ${
+                      selectedOption === "review" ? "active" : ""
+                    }`}
+                    onClick={() => setSelectedOption("review")}
+                  >
+                    Comments
+                  </li>
+                  
                 </ul>
               
             </div>
@@ -215,6 +236,7 @@ const Profile = () => {
           </div>
         </div>
       </div>
+      <ToastContainer position="top-center" />
     </div>
   );
 };

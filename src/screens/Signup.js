@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+// import './Signup.css'; // Make sure to create Signup.css for your styles
 
-export default function Signup() {
+const Signup = () => {
   const navigate = useNavigate();
 
   const [credentials, setCredentials] = useState({
@@ -14,6 +17,8 @@ export default function Signup() {
   });
 
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [passwordStrength, setPasswordStrength] = useState(false);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -22,16 +27,30 @@ export default function Signup() {
     if (name === 'password') {
       checkPasswordStrength(value);
     }
+
+    if (name === 'phone') {
+      checkMobileNumber(value);
+    }
   };
 
   const checkPasswordStrength = (password) => {
     const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).{8,}$/;
+    const isStrong = passwordRegex.test(password);
+    setPasswordStrength(isStrong);
     setCredentials((prevCredentials) => ({
       ...prevCredentials,
-      passwordStrength: passwordRegex.test(password) ? 'strong' : 'weak',
-      passwordMessage: passwordRegex.test(password)
+      passwordStrength: isStrong ? 'strong' : 'weak',
+      passwordMessage: isStrong
         ? 'Strong password'
         : 'Weak password (minimum 8 characters, including uppercase, lowercase, numbers, and special characters)',
+    }));
+  };
+
+  const checkMobileNumber = (phone) => {
+    const phoneRegex = /^\d{10}$/;
+    setCredentials((prevCredentials) => ({
+      ...prevCredentials,
+      phoneError: phoneRegex.test(phone) ? '' : 'Mobile number must be 10 digits',
     }));
   };
 
@@ -39,8 +58,19 @@ export default function Signup() {
     setShowPassword(!showPassword);
   };
 
+  const handleToggleConfirmPassword = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Check if there are any errors before submitting
+    if (credentials.phoneError) {
+      alert('Please correct the form errors before submitting.');
+      return;
+    }
+
     const response = await fetch('http://localhost:8001/api/auth/createuser', {
       method: 'POST',
       headers: {
@@ -58,67 +88,141 @@ export default function Signup() {
   };
 
   return (
-    <div className="py-5" style={{ background: 'rgba(255, 255, 0, 0.1)' }}>
-      <div className="container">
-        <form className="bg-white p-4 rounded shadow" onSubmit={handleSubmit}>
-          <br />
-          <h1 className="text-primary text-center">Registration Form</h1>
-
-          {['name', 'email', 'password', 'confirmPassword', 'phone', 'geolocation'].map((fieldName) => (
-            <div className="mb-3" key={fieldName}>
-              <label htmlFor={fieldName} className="form-label text-capitalize">
-                <strong>{fieldName === 'password' ? 'Password' : fieldName} :</strong>
-                {fieldName !== 'password' && <sup className="text-danger">*</sup>}
-              </label>
-              {fieldName === 'password' ? (
-                <div className="input-group">
+    <div className="container m-5">
+      <div className="row justify-content-center">
+        <div className="col-md-6 col-lg-4">
+          <div className="card bg-light text-info">
+            <div className="card-body">
+              <h1 className="text-center mb-4">Signup Page</h1>
+              <form onSubmit={handleSubmit}>
+                <div className="input-group mb-3">
                   <input
-                    type={showPassword ? 'text' : 'password'}
+                    type="text"
                     className="form-control"
-                    id={fieldName}
-                    name={fieldName}
-                    value={credentials[fieldName]}
+                    id="name"
+                    name="name"
+                    value={credentials.name}
                     onChange={handleChange}
-                    required={fieldName !== 'password'}
+                    placeholder="Name"
+                    required
                   />
-                  <button
-                    className="btn btn-outline-secondary"
-                    type="button"
-                    onClick={handleTogglePassword}
-                  >
-                    {showPassword ? 'Hide' : 'Show'}
+                </div>
+
+                <div className="input-group mb-3">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="email"
+                    name="email"
+                    value={credentials.email}
+                    onChange={handleChange}
+                    placeholder="Email"
+                    required
+                  />
+                </div>
+
+                <div className="mb-3">
+                  <div className="input-group">
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      className={`form-control ${
+                        passwordStrength ? 'is-valid' : 'is-invalid'
+                      }`}
+                      id="password"
+                      name="password"
+                      placeholder="Password"
+                      value={credentials.password}
+                      onChange={handleChange}
+                      required
+                    />
+                    <div className="input-group-append">
+                      <button
+                        className="btn btn-outline-secondary"
+                        type="button"
+                        onClick={handleTogglePassword}
+                      >
+                        <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                      </button>
+                    </div>
+                  </div>
+                  {passwordStrength && (
+                    <div className="valid-feedback">{credentials.passwordMessage}</div>
+                  )}
+                  {!passwordStrength && (
+                    <div className="invalid-feedback">{credentials.passwordMessage}</div>
+                  )}
+                </div>
+
+                <div className="mb-3">
+                  <div className="input-group">
+                    <input
+                      type={showConfirmPassword ? 'text' : 'password'}
+                      className="form-control"
+                      id="confirmPassword"
+                      name="confirmPassword"
+                      value={credentials.confirmPassword}
+                      onChange={handleChange}
+                      placeholder="Confirm Password"
+                      required
+                    />
+                    <div className="input-group-append">
+                      <button
+                        className="btn btn-outline-secondary"
+                        type="button"
+                        onClick={handleToggleConfirmPassword}
+                      >
+                        <FontAwesomeIcon icon={showConfirmPassword ? faEyeSlash : faEye} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="input-group mb-3">
+                  <input
+                    type="text"
+                    className={`form-control ${
+                      credentials.phoneError ? 'is-invalid' : ''
+                    }`}
+                    id="phone"
+                    name="phone"
+                    value={credentials.phone}
+                    onChange={handleChange}
+                    placeholder="Phone"
+                    required
+                  />
+                  {credentials.phoneError && (
+                    <div className="invalid-feedback">{credentials.phoneError}</div>
+                  )}
+                </div>
+
+                <div className="input-group mb-3">
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="geolocation"
+                    name="geolocation"
+                    value={credentials.geolocation}
+                    onChange={handleChange}
+                    placeholder="Location"
+                    required
+                  />
+                </div>
+
+                <div className="text-center">
+                  <button type="submit" className="btn btn-primary">
+                    Sign In
                   </button>
+                  <Link to="/auth/login" className="btn btn-danger ms-2">
+                    Already Signin
+                  </Link>
                 </div>
-              ) : (
-                <input
-                  type={fieldName === 'email' ? 'email' : 'text'}
-                  className="form-control"
-                  id={fieldName}
-                  name={fieldName}
-                  value={credentials[fieldName]}
-                  onChange={handleChange}
-                  required={fieldName !== 'password'}
-                />
-              )}
-
-              {fieldName === 'password' && credentials.passwordStrength && (
-                <div className={`text-${credentials.passwordStrength}`}>
-                  {credentials.passwordMessage}
-                </div>
-              )}
+              </form>
             </div>
-          ))}
-
-          <div className="d-flex justify-content-center">
-            <Link to="/auth/login" className="btn btn-danger me-2">
-              Already a User
-            </Link>
-            <button type="submit" className="btn btn-primary">
-              Submit
-            </button>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );
-}
+};
+
+export default Signup;

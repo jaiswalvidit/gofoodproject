@@ -1,32 +1,43 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatchCart, useCart } from './ContextReducer';
-import { IMAGE_URL } from '../constants';
+import React, { useState, useEffect } from "react";
+import { useDispatchCart, useCart } from "./ContextReducer";
+import { IMAGE_URL } from "../constants";
 
 function FoodDataCard({ foodItem }) {
   const dispatch = useDispatchCart();
   const data = useCart();
-
+  const authToken = (localStorage.getItem('authToken'));
   const fixedPrice = foodItem.cost;
   const [qty, setQty] = useState(0);
   const [addedToCart, setAddedToCart] = useState(false);
   const finalPrice = qty * fixedPrice;
 
   const handleAddToCart = async () => {
+    if(!authToken)
+    {alert("Login First!!!!");
+    return ;
+    }
+
     if (qty > 0) {
-      const existingFoodIndex = data.findIndex(item => item.id === foodItem._id);
+      const existingFoodIndex = data.findIndex(
+        (item) => item.id === foodItem._id
+      );
 
       if (existingFoodIndex !== -1) {
         const existingFood = data[existingFoodIndex];
-        await dispatch({ type: 'UPDATE', index: existingFoodIndex, qty: existingFood.qty + qty });
+        await dispatch({
+          type: "UPDATE",
+          index: existingFoodIndex,
+          qty: existingFood.qty + qty,
+        });
       } else {
         await dispatch({
-          type: 'ADD',
+          type: "ADD",
           id: foodItem._id,
           name: foodItem.itemName,
           price: fixedPrice,
           qty,
           imageId: foodItem.cloudinaryImageId,
-          description: foodItem.description
+          description: foodItem.description,
         });
       }
 
@@ -48,38 +59,70 @@ function FoodDataCard({ foodItem }) {
   }, [addedToCart]);
 
   return (
-    <div className="card m-2 bg-light text-dark rounded-20" style={{ maxWidth: "400px", borderRadius: "10px", boxShadow: "2px 4px 2px rgba(0, 0, 0, 0.6)", transition: "transform 0.2s" }}
-      onMouseEnter={(e) => e.currentTarget.style.transform = "scale(1.05)"}
-      onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}
+    <>
+    <div
+      className="m-2 bg-light text-dark rounded-20"
+      style={{
+        display: "flex",
+        maxWidth: "500px",
+        borderRadius: "10px",
+        boxShadow: "2px 4px 2px rgba(0, 0, 0, 0.6)",
+        transition: "transform 0.2s",
+        padding: "10px", // Increased padding for better spacing
+      }}
+      onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
+      onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
     >
-      <img className='img-fluid rounded' src={`${IMAGE_URL}${foodItem.cloudinaryImageId}`} alt='Food' style={{ objectFit: 'contain', width: "100%", maxHeight: "200px" }} />
-      <div className='card-body text-center'>
-        <div className='row'>
-          <div className='col-md-7'>
-            <h5 className='card-title text-secondary fs-5'>{foodItem.itemName}</h5>
-            <p className='card-text text-primary fs-6'>Rs {foodItem.cost}</p>
-            
-          </div>
-          <div className='col-md-5'>
-            <div className='quantity-control text-success fs-6'>
-              <button className='btn btn-success btn-sm px-1' onClick={decrementQty} style={{ width: '30px' }}> - </button>
-              <span className='quantity-display fs-6 px-2 m-1'>{qty}</span>
-              <button className='btn btn-success btn-sm' onClick={incrementQty} style={{ width: '30px' }}> + </button>
-            </div>
-            <p className='mt-2 text-success fs-6'>Total : Rs. {finalPrice.toFixed(2)}</p>
-          </div>
+      <div style={{ flex: 1, marginRight: "15px" }}>
+        <img
+          className="img-fluid rounded"
+          src={`${IMAGE_URL}${foodItem.cloudinaryImageId}`}
+          alt="Food"
+          style={{ objectFit: "contain", width: "100%", maxHeight: "220px" }}
+        />
+       
+      </div>
+      <div className="card-body text-left" style={{ flex: 1 }}>
+        <h6 className="card-title text-secondary  mb-2 mx-2">
+          {foodItem.itemName}-
+          <span className="text-primary">{foodItem.cost}Rs</span>
+        </h6>
+        {/* {foodItem.description} */}
+        <div className="quantity-control text-success fs-6 mb-3">
+          <button
+            className="btn btn-success btn-sm px-1"
+            onClick={decrementQty}
+            style={{ backgroundColor: "#28a745", width: "30px" }} // Green color
+          >
+            -
+          </button>
+          <span className="quantity-display fs-7 px-2 m-1">{qty}</span>
+          <button
+            className="btn btn-success btn-sm"
+            onClick={incrementQty}
+            style={{ backgroundColor: "#28a745", width: "30px" }} // Green color
+          >
+            +
+          </button>
         </div>
+        <p className="text-success fs-6 mb-2">
+          Total: Rs. {finalPrice}/-
+        </p>
+        
         {addedToCart ? (
-          <span className="alert alert-success" role="alert">
+          <span className="btn btn-primary " role="alert">
             Added to Cart!
           </span>
         ) : (
-          <button className='btn btn-primary' onClick={handleAddToCart}>
+          <button className="btn btn-primary" onClick={handleAddToCart}>
             Add to Cart
           </button>
         )}
       </div>
+      
     </div>
+    
+    </>
   );
 }
 

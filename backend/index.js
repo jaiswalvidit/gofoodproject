@@ -24,6 +24,7 @@ app.use('/api', require('./routes/DisplayData'));
 app.use('/api/auth/', require('./routes/Restaurant'));
 app.use('/api/auth/', require('./routes/ItemData'));
 app.use('/api', require('./routes/OrderData'));
+app.use('/api',require('./routes/Review'));
 
 const port = process.env.PORT || 6000;
 

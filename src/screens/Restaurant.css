@@ -1,0 +1,60 @@
+/* Style for the input with border bottom */
+.input-with-border-bottom {
+    border: none;
+    border-bottom: 2px solid #3498db; /* You can change this color */
+    outline: none; /* Remove default outline */
+    background-color: transparent; /* Transparent background */
+    padding: 8px; /* Add padding */
+    margin-bottom: 10px; /* Add margin bottom */
+  }
+  
+  /* Style for the input when focused */
+  .input-with-border-bottom:focus {
+    border-left:2px solid #2980b9;
+    border-bottom: 2px solid #2980b9; /* Change this color for focus effect */
+  }
+  
+  /* Style for the input group container */
+  .input-group {
+    position: relative;
+    width: 100%;
+    
+    margin-bottom: 20px; /* Add margin bottom */
+  }
+  
+  
+  .input-group input {
+    width: calc(100% - 38px); /* Adjust the width as needed */
+    padding: 8px;
+    border: none;
+    color:gray;
+    font-size:large;
+    border-bottom: 2px solid #3498db; /* Change this color as needed */
+    outline: none;
+    border-left:2px solid #2980b9;
+    background-color: transparent;
+  }
+  
+  /* Style for the show/hide button */
+  .input-group button {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    padding: 5px; /* Add padding */
+  }
+  
+  /* Style for the button icon */
+  .input-group button svg {
+    font-size: 18px;
+    color: #3498db; /* Change this color as needed */
+  }
+  
+  /* Style for the input when focused */
+  .input-group input:focus {
+    border-bottom: 2px solid #2980b9; /* Change this color for focus effect */
+  }
+  

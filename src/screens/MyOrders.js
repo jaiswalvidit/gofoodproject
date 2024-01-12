@@ -6,39 +6,84 @@ export default function MyOrder() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchMyOrder = async () => {
-      try {
-        const userEmail = localStorage.getItem('userEmail');
+  const fetchMyOrder = async () => {
+    try {
+      const userEmail = localStorage.getItem('userEmail');
 
-        const response = await fetch(`http://localhost:8001/api/myOrderData?email=${userEmail}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-        console.log(response);
+      const response = await fetch(`http://localhost:8001/api/myOrderData?email=${userEmail}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
-        if (response.ok) {
-          const data = await response.json();
-          console.log(data);
-          setOrderData(data.orderData[0] || { email: '', products: [] });
-        } else {
-          console.error('Fetch failed with status:', response.status);
-          setError('Failed to fetch data');
-        }
-      } catch (error) {
-        console.error('Error:', error);
-        setError('An unexpected error occurred');
-      } finally {
-        setLoading(false);
+      if (response.ok) {
+        const data = await response.json();
+        setOrderData(data.orderData[0] || { email: '', products: [] });
+      } else {
+        console.error('Fetch failed with status:', response.status);
+        setError('Failed to fetch data');
       }
-    };
+    } catch (error) {
+      console.error('Error:', error);
+      setError('An unexpected error occurred');
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchMyOrder();
   }, []);
 
-  // Styles
+  const handleDeleteOrder = async () => {
+    try {
+      const userEmail = localStorage.getItem('userEmail');
+
+      const response = await fetch(`http://localhost:8001/api/myOrderData/${userEmail}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        setOrderData({ email: '', products: [] });
+      } else {
+        console.error('Delete failed with status:', response.status);
+        setError('Failed to delete order');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      setError('An unexpected error occurred');
+    }
+  };
+
+  const handleDeleteProduct = async (productId) => {
+    try {
+      const userEmail = localStorage.getItem('userEmail');
+
+      const response = await fetch(`http://localhost:8001/api/myOrderData/${userEmail}/${productId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      console.log(response);
+      if (response.ok) {
+        // Refresh the order data after successful product deletion
+        fetchMyOrder();
+      } else {
+        console.error('Delete failed with status:', response.status);
+        setError('Failed to delete product');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      setError('An unexpected error occurred');
+    }
+  };
+
+  // Styles (unchanged from your provided code)
   const cardStyle = {
     backgroundColor: '#343a40',
     color: 'white',
@@ -94,7 +139,7 @@ export default function MyOrder() {
                                         <strong>Name: {product.Name}</strong>
                                       </p>
                                       <p className="text-danger mb-0">
-                                        <strong>Price: ₹{product.price / 100}/-</strong>
+                                        <strong>Price: ₹{product.price}/-</strong>
                                       </p>
                                       <p className="text-dark mb-0">
                                         <strong>Quantity: {product.qty}</strong>
@@ -112,21 +157,43 @@ export default function MyOrder() {
                                       />
                                     </div>
                                   </div>
+                                 
                                 </li>
                               ))}
                             </ul>
+                            <button
+                                    className="btn btn-danger"
+                                    onClick={() => {
+                                      if (window.confirm('Are you sure you want to delete this product?')) {
+                                        handleDeleteProduct(productGroup[0].Order_date);
+                                      }
+                                    }}
+                                  >
+                                    Delete Product
+                                  </button>
                           </div>
                         </li>
                       ))
                     )}
                   </ul>
                 )}
+                {orderData.products && orderData.products.length > 0 && (
+                  <button
+                    className="btn btn-danger"
+                    onClick={() => {
+                      if (window.confirm('Are you sure you want to delete this order?')) {
+                        handleDeleteOrder();
+                      }
+                    }}
+                  >
+                    Delete Order
+                  </button>
+                )}
               </>
             )}
           </div>
         </div>
       </div>
-      {/* <Footer /> */}
     </div>
   );
 }

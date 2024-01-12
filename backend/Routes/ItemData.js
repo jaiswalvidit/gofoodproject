@@ -42,7 +42,6 @@ router.post('/createItem', async (req, res) => {
     console.log(createdItem._id);
     console.log(createdItem.category);
     await restaurant.save();
-    restaurant.cuisines.push(createdItem._id);
     
     res.status(201).json({ message: 'Item added successfully', item: createdItem });
   } catch (error) {

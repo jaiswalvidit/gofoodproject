@@ -49,7 +49,7 @@ itemSchema.post('save', async function (doc) {
   try {
     const restaurant = await Restaurant.findOneAndUpdate(
       { restaurantName: doc.parentName },
-      { $push: { lists: doc._id, cuisines: doc._id } },
+      { $push: { cuisines: doc._id } },
       { new: true }
     ).exec();
 
